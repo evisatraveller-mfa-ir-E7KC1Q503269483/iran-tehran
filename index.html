@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-VISA</title>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px 15px;
+  }
+
+  h1 {
+    color: #00a67e;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .section {
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    padding: 10px 0;
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .item:last-child {
+    border-bottom: none;
+  }
+
+  .label {
+    color: #555;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .value {
+    color: #333;
+    font-size: 14px;
+    text-align: right;
+  }
+
+  .status {
+    color: #00a67e;
+    font-weight: bold;
+  }
+
+  .button {
+    background-color: #00a67e;
+    color: #fff;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+  .print-btn {
+    background-color: #777;
+    color: #fff;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 0;
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .print-btn::before {
+    content: "🖨";
+  }
+
+  .insurance-link {
+    color: #00a67e;
+    text-decoration: none;
+  }
+
+  .map {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e5/World_map_blank_without_borders.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 50px;
+    opacity: 0.15;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>E-VISA</h1>
+    <div class="map"></div>
+
+    <div class="section">
+      <div class="item">
+        <div class="label">Application ID</div>
+        <div class="value">E0KC9E5WKCQ26491I5</div>
+      </div>
+      <div class="item">
+        <div class="label">Passport number</div>
+        <div class="value">P08823440</div>
+      </div>
+      <div class="item">
+        <div class="label">Nationality</div>
+        <div class="value">Afghanistan</div>
+      </div>
+      <div class="item">
+        <div class="label">Application submission date</div>
+        <div class="value">2025/10/13</div>
+      </div>
+      <div class="item">
+        <div class="label">Application Status:</div>
+        <div class="value status">Issued</div>
+      </div>
+      <div class="item">
+        <div class="label">Valid from:</div>
+        <div class="value">2025/10/18</div>
+      </div>
+      <div class="item">
+        <div class="label">Valid to:</div>
+        <div class="value">2025/12/1</div>
+      </div>
+      <div class="item">
+        <div class="label">Stay Period:</div>
+        <div class="value">30 Day(s)</div>
+      </div>
+      <div class="item">
+        <div class="label">Insurance Number:</div>
+        <div class="value"><a href="#" class="insurance-link">1404/1515/113/4528/2067831</a></div>
+      </div>
+    </div>
+
+    <button class="button">E-visa Homepage</button>
+    <button class="print-btn">Print Insurance</button>
+  </div>
+</body>
+</html>
