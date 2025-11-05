@@ -1,160 +1,275 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-VISA</title>
-<style>
-  body {
-    font-family: "Segoe UI", sans-serif;
-    background-color: #fff;
-    margin: 0;
-    padding: 0;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-VISA Status Simulation</title>
+    <style>
+        /* تعیین فونت و استایل‌های پایه */
+        body {
+            font-family: Arial, Helvetica, sans-serif; /* فونت ساده و در دسترس */
+            background-color: #f4f6f9; /* رنگ پس‌زمینه کلی روشن */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            /* اطمینان از قرارگیری در حالت موبایل در مرورگر */
+        }
 
-  .container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px 15px;
-  }
+        .phone-mockup {
+            width: 100%;
+            max-width: 450px; /* اندازه تقریبی برای شبیه‌سازی موبایل */
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+        }
 
-  h1 {
-    color: #00a67e;
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 15px;
-  }
+        /* بخش هدر اصلی (E-VISA) */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
 
-  .section {
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 3px rgba(0,0,0,0.1);
-    padding: 10px 0;
-  }
+        .e-visa-title {
+            color: #16a085; /* رنگ سبز تیره مشابه تصویر */
+            font-size: 20px;
+            font-weight: bold;
+        }
 
-  .item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 15px;
-    border-bottom: 1px solid #eee;
-  }
+        .menu-icon {
+            cursor: pointer;
+            font-size: 28px;
+            color: #333;
+            /* ایجاد آیکون سه خطی */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            height: 20px;
+            width: 25px;
+        }
 
-  .item:last-child {
-    border-bottom: none;
-  }
+        .menu-icon span {
+            display: block;
+            height: 2px;
+            background-color: #333;
+            border-radius: 1px;
+        }
 
-  .label {
-    color: #555;
-    font-weight: bold;
-    font-size: 14px;
-  }
+        /* بخش اصلی وضعیت */
+        .status-container {
+            padding: 0 20px 20px 20px;
+            position: relative;
+            z-index: 1; /* اطمینان از قرارگیری محتوا روی پس‌زمینه */
+        }
 
-  .value {
-    color: #333;
-    font-size: 14px;
-    text-align: right;
-  }
+        /* شبیه‌سازی نقشه پس‌زمینه (با استفاده از CSS) */
+        .background-map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px; /* ارتفاع تقریبی نقشه */
+            overflow: hidden;
+            opacity: 0.1; /* شفافیت کم */
+        }
 
-  .status {
-    color: #00a67e;
-    font-weight: bold;
-  }
+        /* شبیه‌سازی طرح نقشه ایران (به صورت یکسری الگو) */
+        .background-map::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300%;
+            height: 300%;
+            background-image: repeating-linear-gradient(
+                45deg,
+                #16a085,
+                #16a085 1px,
+                transparent 1px,
+                transparent 15px
+            ),
+            repeating-linear-gradient(
+                -45deg,
+                #16a085,
+                #16a085 1px,
+                transparent 1px,
+                transparent 15px
+            );
+            /* برای شبیه سازی شکل نقشه، می‌توان از clip-path استفاده کرد اما پیچیده است.
+            در اینجا از یک طرح شطرنجی مورب استفاده می‌شود. */
+            transform: translate(-50%, -50%);
+        }
 
-  .button {
-    background-color: #00a67e;
-    color: #fff;
-    width: 100%;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 0;
-    font-size: 15px;
-    font-weight: bold;
-    margin-top: 20px;
-    cursor: pointer;
-  }
+        .application-status-header {
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+            padding-top: 15px;
+            margin-bottom: 10px;
+        }
 
-  .print-btn {
-    background-color: #777;
-    color: #fff;
-    width: 100%;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 0;
-    font-size: 14px;
-    margin-top: 10px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-  }
+        /* آیتم‌های وضعیت */
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f0f0f0; /* رنگ خاکستری روشن فیلدها */
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 2px;
+            min-height: 20px; /* ارتفاع ثابت برای شباهت بیشتر */
+        }
 
-  .print-btn::before {
-    content: "🖨";
-  }
+        .item-label {
+            color: #555;
+            font-size: 14px;
+            flex-grow: 1;
+        }
 
-  .insurance-link {
-    color: #00a67e;
-    text-decoration: none;
-  }
+        .item-value {
+            color: #333;
+            font-size: 15px;
+            font-weight: 500;
+            text-align: right;
+            white-space: nowrap;
+        }
 
-  .map {
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e5/World_map_blank_without_borders.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    height: 50px;
-    opacity: 0.15;
-    margin-bottom: 10px;
-  }
-</style>
+        /* استایل خاص برای وضعیت (Issued) */
+        .status-item.issued-status {
+            background-color: #f0f0f0; /* پس‌زمینه مشابه بقیه */
+        }
+
+        .status-item.issued-status .item-value {
+            color: #1abc9c; /* رنگ سبز روشن برای کلمه Issued */
+            font-weight: bold;
+        }
+
+        /* استایل خاص برای شماره بیمه (لینک) */
+        .status-item .insurance-link {
+            color: #1abc9c; /* رنگ سبز روشن مشابه دکمه */
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* بخش دکمه‌ها */
+        .button-group {
+            margin-top: 25px;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .primary-button {
+            background-color: #1abc9c; /* سبز اصلی دکمه */
+            color: white;
+            box-shadow: 0 2px 5px rgba(26, 188, 156, 0.4); /* سایه کم برای دکمه اصلی */
+        }
+
+        .secondary-button {
+            background-color: #8c8c8c; /* خاکستری دکمه فرعی */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .secondary-button svg {
+            margin-left: 8px; /* فاصله بین آیکون و متن */
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>E-VISA</h1>
-    <div class="map"></div>
 
-    <div class="section">
-      <div class="item">
-        <div class="label">Application ID</div>
-        <div class="value">E7KC1Q5WKC03269483</div>
-      </div>
-      <div class="item">
-        <div class="label">Passport number</div>
-        <div class="value">P09729806</div>
-      </div>
-      <div class="item">
-        <div class="label">Nationality</div>
-        <div class="value">Afghanistan</div>
-      </div>
-      <div class="item">
-        <div class="label">Application submission date</div>
-        <div class="value">2025/10/13</div>
-      </div>
-      <div class="item">
-        <div class="label">Application Status:</div>
-        <div class="value status">Issued</div>
-      </div>
-      <div class="item">
-        <div class="label">Valid from:</div>
-        <div class="value">2025/10/18</div>
-      </div>
-      <div class="item">
-        <div class="label">Valid to:</div>
-        <div class="value">2025/12/1</div>
-      </div>
-      <div class="item">
-        <div class="label">Stay Period:</div>
-        <div class="value">30 Day(s)</div>
-      </div>
-      <div class="item">
-        <div class="label">Insurance Number:</div>
-        <div class="value"><a href="#" class="insurance-link">1404/1515/113/4528/2067831</a></div>
-      </div>
+    <div class="phone-mockup">
+        <div class="background-map"></div>
+
+        <div class="header">
+            <div class="e-visa-title">E-VISA</div>
+            <div class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div class="status-container">
+            <div class="application-status-header">Application Status</div>
+
+            <div class="status-item">
+                <div class="item-label">Application ID</div>
+                <div class="item-value">E7KC1Q5WKC03269483</div>
+            </div>
+
+            <div class="status-item">
+                <div class="item-label">Passport number</div>
+                <div class="item-value">P09729806</div>
+            </div>
+
+            <div class="status-item">
+                <div class="item-label">Nationality</div>
+                <div class="item-value">Afghanistan</div>
+            </div>
+
+            <div class="status-item">
+                <div class="item-label">Application submission date</div>
+                <div class="item-value">2025/10/20</div>
+            </div>
+            
+            <div class="status-item issued-status">
+                <div class="item-label">Application Status:</div>
+                <div class="item-value">Issued</div>
+            </div>
+            
+            <div class="status-item">
+                <div class="item-label">Valid from:</div>
+                <div class="item-value">2025/11/04</div>
+            </div>
+
+            <div class="status-item">
+                <div class="item-label">Valid to:</div>
+                <div class="item-value">2025/12/03</div>
+            </div>
+
+            <div class="status-item">
+                <div class="item-label">Stay Period:</div>
+                <div class="item-value">30 Day(s)</div>
+            </div>
+
+            <div class="status-item">
+                <div class="item-label">Insurance Number:</div>
+                <div class="item-value">
+                    <a href="#" class="insurance-link">1404/1515/113/4528/2057638</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button class="button primary-button">E-visa Homepage</button>
+            <button class="button secondary-button">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M2.5 8a.5.5 0 1 0 0-1h-2a.5.5 0 0 0 0 1h2Z"/>
+                    <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4Zm11 4v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1Z"/>
+                    <path d="M11.5 13a.5.5 0 1 0 0-1h-7a.5.5 0 0 0 0 1h7Z"/>
+                  </svg>
+                Print Insurance
+            </button>
+        </div>
+        
     </div>
-
-    <button class="button">E-visa Homepage</button>
-    <button class="print-btn">Print Insurance</button>
-  </div>
 </body>
-
 </html>
